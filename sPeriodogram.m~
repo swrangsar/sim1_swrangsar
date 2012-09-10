@@ -1,0 +1,30 @@
+function [ Pper ] = sPeriodogram( data, time )
+%SPERIODOGRAM A custom-made function to calculate periodogram.
+%   This function just calculates the periodogram of the given sample thus
+%   showing power spectral density of the given data.
+if nargin < 2
+    error('Not enough arguments!');
+end
+figure, subplot(2,1,1); plot(time, data);
+
+N = length(data);
+Xn = fft(data);
+Pper = ((abs(Xn).^2)/N);
+if rem(N, 2) == 0
+    k = -N/2:1:(N/2)-1;
+else
+    k = -(N-1)/2:1:(N-1)/2;
+end
+
+W = 2*pi*k/N;
+subplot(2,1,2); plot(W, fftshift(Pper));
+title('Periodogram of the above data');
+xlabel('Frequency (rad/s)');
+ylabel('Magnitude (unitless)');
+
+logData = log(data);
+avg = mean(logData(:));
+transformedData = logData-avg;
+
+end
+
